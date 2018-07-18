@@ -14,6 +14,9 @@ Administrator
 
 
 Param(
+    [Parameter(Mandatory = $True)]
+    [ValidateNotNullOrEmpty()]
+    [string] $VMResourceGroupName,
 
     [Parameter(Mandatory = $True)]
     [ValidateNotNullOrEmpty()]
