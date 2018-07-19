@@ -356,9 +356,7 @@ catch [Exception]
 {
     Write-Output $_.Exception.Message
 }
-    $Psswd = $Password | ConvertTo-SecureString -asPlainText -Force
-    $Credential = New-Object System.Management.Automation.PSCredential($Username,$Psswd)
-    Login-AzureRmAccount -Credential $Credential
+
     Set-Location $CodeBitPath
     .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $Username -Password $Password -VMResourceGroupName $VMResourceGroupName
     
