@@ -349,7 +349,7 @@ try
         
     }
     Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $Username -Password $Password -VMResourceGroupName $VMResourceGroupName
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -VMResourceGroupName $VMResourceGroupName -Username $Username -Password $Password
     
 
 }
