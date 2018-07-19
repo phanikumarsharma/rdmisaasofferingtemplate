@@ -14,9 +14,6 @@ Administrator
 
 
 Param(
-    [Parameter(Mandatory = $True)]
-    [ValidateNotNullOrEmpty()]
-    [string] $VMResourceGroupName,
 
     [Parameter(Mandatory = $True)]
     [ValidateNotNullOrEmpty()]
@@ -348,9 +345,6 @@ try
        }
         
     }
-    Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $Username -Password $Password -VMResourceGroupName $VMResourceGroupName
-    
 
 }
 
