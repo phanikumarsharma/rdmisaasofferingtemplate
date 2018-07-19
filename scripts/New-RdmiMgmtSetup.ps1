@@ -348,7 +348,9 @@ try
        }
         
     }
-
+    Set-Location $CodeBitPath
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $Username -Password $Password -VMResourceGroupName $VMResourceGroupName
+    
 
 }
 
@@ -357,9 +359,7 @@ catch [Exception]
     Write-Output $_.Exception.Message
 }
 
-    Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $Username -Password $Password -VMResourceGroupName $VMResourceGroupName
-    
+
 
 
 
