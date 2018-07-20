@@ -1,3 +1,1 @@
-let armTemplateUri = 'https://raw.githubusercontent.com/noelbundick/arm-samples/master/1-storageaccount/template.json';
-let deployLink = `https://portal.azure.com/#create/Microsoft.Template/uri/${encodeURIComponent(armTemplateUri)}`;
-window.location = deployLink;
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/rdmisaastemplate.json">Deploy to Azure</a>
