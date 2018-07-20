@@ -10,6 +10,7 @@ two App services- Api and App. At End of this script, it will generate public UR
 .Permission
 Administrator
 
+
 #>
 
 
@@ -82,8 +83,11 @@ Param(
       
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip"
+    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip",
    
+    [Parameter(Mandatory = $False)]
+    [ValidateNotNullOrEmpty()]
+    [string] $VMResourceGroupName
       
 )
     Invoke-WebRequest -Uri $fileURI -OutFile "C:\RDmiSaaS.zip"
@@ -346,6 +350,8 @@ try
        }
         
     }
+    Set-Location $CodeBitPath
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -ResourceGroupName $VMResourceGroupName 
 
 }
 
