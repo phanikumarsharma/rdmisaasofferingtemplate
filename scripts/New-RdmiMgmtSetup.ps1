@@ -16,7 +16,6 @@ Administrator
 
 Param(
 
-
     [Parameter(Mandatory = $True)]
     [ValidateNotNullOrEmpty()]
     [string] $SubscriptionId,
