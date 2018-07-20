@@ -86,7 +86,7 @@ Param(
    
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string] $VMResourceGroupName
+    [string] $vmResourceGroupName
       
 )
     Invoke-WebRequest -Uri $fileURI -OutFile "C:\RDmiSaaS.zip"
@@ -350,7 +350,7 @@ try
         
     }
     Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -ResourceGroupName $VMResourceGroupName 
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -vmResourceGroupName $vmResourceGroupName 
 
 }
 
