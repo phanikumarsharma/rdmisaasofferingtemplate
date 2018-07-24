@@ -17,23 +17,6 @@
           "description":"ResourceGroup Name for the deployment"
         }
       },
-      "Location":
-      {
-        "type": "string",
-        "allowedValues": [
-          "East US",
-          "Central US",
-          "North Central US",
-          "South Central US",
-          "West Central US",
-          "West US",
-          "South India"
-        ],
-        "defaultValue": "South Central US",
-        "metadata": {
-          "description":"Please Select your Region"
-        }
-      },
       "ApplicationID":
       {
         "type": "string",
@@ -55,13 +38,13 @@
           "description":"ResourceURL to modify in your API App"
         }
       },
-      "Azure LoginID": {
+      "AzureLoginID": {
         "type": "string",
         "metadata": {
             "description": "HosterAdminName for the Azure Partner Account."
         }
       },
-        "Azure LoginPassword": {
+        "AzureLoginPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "HosterAdminPassword for the Azure Partner Account."
@@ -77,6 +60,7 @@
         "subnetPrefix": "10.0.0.0/24",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
         "vmName": "MyVM",
+        "Location":"[resourceGroup().location]",
         "dnsLabelPrefix":"test",
         "virtualNetworkName": "MyVNET",
         "publicIPAddressName": "myPublicIP",
@@ -92,7 +76,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('publicIPAddressName')]",
             "apiVersion": "2016-09-01",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('Location')]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "dnsSettings": {
@@ -104,7 +88,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[variables('virtualNetworkName')]",
             "apiVersion": "2016-09-01",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('Location')]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -125,7 +109,7 @@
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('nicName')]",
             "apiVersion": "2016-09-01",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('Location')]",
             "properties": {
                 "ipConfigurations": [
                     {
@@ -151,7 +135,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[variables('vmName')]",
             "apiVersion": "2016-04-30-preview",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('Location')]",
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_A2"
@@ -185,7 +169,7 @@
                     "type": "extensions",
                     "name": "CustomScriptExtension",
                     "apiVersion": "2016-04-30-preview",
-                    "location": "[resourceGroup().location]",
+                    "location": "[variables('Location')]",
                     "properties": {
                         "publisher": "Microsoft.Compute",
                         "type": "CustomScriptExtension",
@@ -195,7 +179,7 @@
                            "fileUris": [
                             "https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/scripts/New-RdmiMgmtSetup.ps1"
                         ],
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', parameters('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('Azure LoginID'), '\"',' ',' -Password \"', parameters('Azure LoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
                         }
                     },
                     "dependsOn": [
