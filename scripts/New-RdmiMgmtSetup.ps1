@@ -10,7 +10,6 @@ two App services- Api and App. At End of this script, it will generate public UR
 .Permission
 Administrator
 
-
 #>
 
 
@@ -54,6 +53,10 @@ Param(
 
     [Parameter(Mandatory = $True)]
     [ValidateNotNullOrEmpty()]
+    [string] $RedirectURL,
+
+    [Parameter(Mandatory = $True)]
+    [ValidateNotNullOrEmpty()]
     [string] $UserName,
 
     [Parameter(Mandatory = $True)]
@@ -82,26 +85,26 @@ Param(
       
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip",
-   
-    [Parameter(Mandatory = $False)]
-    [ValidateNotNullOrEmpty()]
-    [string] $vmResourceGroupName
-      
+    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip"
 )
+
+try
+{
+    # copy the files from github to VM
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $fileURI -OutFile "C:\msft-rdmi-saas-offering.zip"
     New-Item -Path "C:\msft-rdmi-saas-offering" -ItemType directory -Force -ErrorAction SilentlyContinue
     Expand-Archive "C:\msft-rdmi-saas-offering.zip" -DestinationPath "C:\msft-rdmi-saas-offering" -ErrorAction SilentlyContinue
+    
+    #Install AzureRM Module   
         
-        
-try
-{
-
     Write-Output "Checking if AzureRm module is installed.."
     $azureRmModule = Get-Module AzureRM -ListAvailable | Select-Object -Property Name -ErrorAction SilentlyContinue
     if (!$azureRmModule.Name) {
         Write-Output "AzureRM module Not Available. Installing AzureRM Module"
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+        Install-Module Azure -Force
         Install-Module AzureRm -Force
         Write-Output "Installed AzureRM Module successfully"
     } 
@@ -110,14 +113,20 @@ try
         Write-Output "AzureRM Module Available"
     }
 
+    #Import AzureRM Module
+
     Write-Output "Importing AzureRm Module.."
     Import-Module AzureRm -ErrorAction SilentlyContinue -Force
+
+    #Login to AzureRM Account
 
     Write-Output "Login Into Azure RM.."
     
     $Psswd = $Password | ConvertTo-SecureString -asPlainText -Force
     $Credential = New-Object System.Management.Automation.PSCredential($UserName,$Psswd)
     Login-AzureRmAccount -Credential $Credential
+
+    #Select the AzureRM Subscription
 
     Write-Output "Selecting Azure Subscription.."
     Select-AzureRmSubscription -SubscriptionId $SubscriptionId
@@ -139,6 +148,7 @@ try
             try
             {
                 ##################################### APPSERVICE PLAN #####################################
+               
                 #create a appservice plan
         
                 Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
@@ -193,14 +203,14 @@ try
                 ##################################### PUBLISHING API-APP PACKAGE #####################################
                 
                 Set-Location $CodeBitPath
+
                 # Extract the Api-App ZIP file content.
             
                 Write-Output "Extracting the Api-App Zip File"
                 Expand-Archive -Path $ApiAppExtractionPath -DestinationPath $ApiAppDirectory -Force 
                 $ApiAppExtractedPath = Get-ChildItem -Path $ApiAppDirectory| Where-Object {$_.FullName -notmatch '\\*.zip($|\\)'} | Resolve-Path -Verbose
                 
-                               
-                # Get publishing profile from Api app
+                # Get publishing profile from Api-App
 
                 Write-Output "Getting the Publishing profile information from Api-App"
                 $ApiAppXML = (Get-AzureRmWebAppPublishingProfile -Name $ApiApp `
@@ -244,14 +254,15 @@ try
                 } 
                 $ApiAppClient.Dispose() 
                 Write-Output "Uploading of Extracted files to Api-App is Successful"
-                #Adding App Settings to Api App
+
+                #Adding App Settings to Api-App
                 
-                Write-Output "Adding App settings to ApiApp"
+                Write-Output "Adding App settings to Api-App"
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
-                                    "ResourceUrl" = "$ResourceURL"
+                                    "ResourceUrl" = "$ResourceURL";
+                                    "RedirectURL" = "$RedirectURL";
                                     }
-
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
             catch [Exception]
@@ -264,6 +275,7 @@ try
             try
             {
                 ##################################### PUBLISHING WEB-APP PACKAGE #####################################
+                
                 Set-Location $CodeBitPath
 
                 Write-Output "Extracting the Web-App Zip File"
@@ -290,7 +302,7 @@ try
 
                 #Change the Url in the main.bundle.js file with the with ApiURL
 
-                Write-Output "Updating the Url in main.bundle.js file with Web-app Url"
+                Write-Output "Updating the Url in main.bundle.js file with Api-app Url"
                 (Get-Content $MainbundlePath).replace( "[api_url]", "http://"+$ApiUrl) | Set-Content $MainbundlePath
 
                 #Get publishing profile from web app
@@ -344,25 +356,10 @@ try
 
             Write-Output "Api URL : http://$ApiUrl"
             Write-Output "Web URL : http://$WebUrl"
-            
-
        }
-        
     }
-     Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -vmResourceGroupName $vmResourceGroupName 
-
 }
-
 catch [Exception]
 {
     Write-Output $_.Exception.Message
 }
-
-
-
-
-
-
- 
-
