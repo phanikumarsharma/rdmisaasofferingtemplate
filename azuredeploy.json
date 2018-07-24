@@ -10,7 +10,7 @@
         }
       },
       
-      "ResourceGroupName":
+      "ResourceGroup":
       {
         "type": "string",
         "metadata": {
@@ -85,7 +85,7 @@
         "adminUsername": "vmadmin",
         "adminPassword": "keepcalm@123",
         "resourcegroupname": "[resourceGroup().name]",
-        "FileURI": "[concat(variables('_artifactsLocation'),'/RDmiSaaS.zip')]"
+        "FileURI": "[concat(variables('_artifactsLocation'),'/msft-rdmi-saas-offering.zip')]"
     },
     "resources": [
         {
@@ -195,7 +195,7 @@
                            "fileUris": [
                             "https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/scripts/New-RdmiMgmtSetup.ps1"
                         ],
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroupName'), '\"',' ', ' -Location \"', parameters('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('Azure LoginID'), '\"',' ',' -Password \"', parameters('Azure LoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', parameters('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('Azure LoginID'), '\"',' ',' -Password \"', parameters('Azure LoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
                         }
                     },
                     "dependsOn": [
