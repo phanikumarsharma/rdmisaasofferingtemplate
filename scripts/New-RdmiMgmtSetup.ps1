@@ -66,7 +66,7 @@ Param(
 
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string] $CodeBitPath= "C:\RDmiSaaS\RDmiSaaS",
+    [string] $CodeBitPath= "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering",
    
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
@@ -82,12 +82,16 @@ Param(
       
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip"
+    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip",
+   
+    [Parameter(Mandatory = $False)]
+    [ValidateNotNullOrEmpty()]
+    [string] $vmResourceGroupName
       
 )
-    Invoke-WebRequest -Uri $fileURI -OutFile "C:\RDmiSaaS.zip"
-    New-Item -Path "C:\RDmiSaaS" -ItemType directory -Force -ErrorAction SilentlyContinue
-    Expand-Archive "C:\RDmiSaaS.zip" -DestinationPath "C:\RDmiSaaS" -ErrorAction SilentlyContinue
+    Invoke-WebRequest -Uri $fileURI -OutFile "C:\msft-rdmi-saas-offering.zip"
+    New-Item -Path "C:\msft-rdmi-saas-offering" -ItemType directory -Force -ErrorAction SilentlyContinue
+    Expand-Archive "C:\msft-rdmi-saas-offering.zip" -DestinationPath "C:\msft-rdmi-saas-offering" -ErrorAction SilentlyContinue
         
         
 try
@@ -345,7 +349,9 @@ try
        }
         
     }
-
+    Set-Location $CodeBitPath
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -vmResourceGroupName $vmResourceGroupName 
+    
 }
 
 catch [Exception]
