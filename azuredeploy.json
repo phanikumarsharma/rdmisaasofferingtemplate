@@ -38,6 +38,13 @@
           "description":"ResourceURL to modify in your API App"
         }
       },
+      "RedirectURL":
+      {
+        "type": "string",
+        "metadata": {
+          "description":"Redirect URL to modify in your API App"
+        }
+      },
       "AzureLoginID": {
         "type": "string",
         "metadata": {
@@ -179,7 +186,7 @@
                            "fileUris": [
                             "https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/scripts/New-RdmiMgmtSetup.ps1"
                         ],
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -RedirectURL \"', parameters('RedirectURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
                         }
                     },
                     "dependsOn": [
