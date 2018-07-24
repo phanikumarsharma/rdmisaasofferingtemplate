@@ -82,11 +82,7 @@ Param(
       
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
-    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip",
-   
-    [Parameter(Mandatory = $False)]
-    [ValidateNotNullOrEmpty()]
-    [string] $vmResourceGroupName
+    [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip"
       
 )
     Invoke-WebRequest -Uri $fileURI -OutFile "C:\RDmiSaaS.zip"
@@ -349,8 +345,6 @@ try
        }
         
     }
-    Set-Location $CodeBitPath
-    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -vmResourceGroupName $vmResourceGroupName 
 
 }
 
