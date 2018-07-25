@@ -51,7 +51,7 @@ Param(
     [ValidateNotNullOrEmpty()]
     [string] $ResourceURL,
 
-    [Parameter(Mandatory = $True)]
+    [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
     [string] $RedirectURL,
 
@@ -261,7 +261,7 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURL" = "$RedirectURL";
+                                    "RedirectURL" = "$ApiUrl";
                                     }
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
