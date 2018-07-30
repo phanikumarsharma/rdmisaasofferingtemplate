@@ -1,6 +1,6 @@
 # Create MSFT-RDmi-SaaS-Offering Environment
 
-This template creates tenants and hostpools in HosterAdmin Environment.
+This template creates msft-rdmi-saas-offering environment.
 
 
 Click the button below to deploy:
