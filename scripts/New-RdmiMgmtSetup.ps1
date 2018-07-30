@@ -366,11 +366,12 @@ try
             Write-Output "Web URL : http://$WebUrl"
         }
     }
-
+    Set-Location $CodeBitPath
+    
     Start-Job -ScriptBlock{
     param($SubscriptionId,$UserName,$Password,$ResourceGroupName)
 
-    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -resourceGroupName $ResourceGroupName"
+    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -resourceGroupName $ResourceGroupName"
 
     } -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
 }
