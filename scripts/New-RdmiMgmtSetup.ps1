@@ -261,7 +261,11 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
+<<<<<<< HEAD
                                     "RedirectURL" = "$ApiUrl";
+=======
+                                    "RedirectURL" = "$WebUrl";
+>>>>>>> 1f999f4f12068c88141af25a86283c71225bfbba
                                     }
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
