@@ -151,7 +151,7 @@ try
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
     }
-    elseif($ResourceGroupName)
+    elseif($ResourceGroup)
         {
             try
             {
@@ -261,13 +261,18 @@ try
                 $ApiAppClient.Dispose() 
                 Write-Output "Uploading of Extracted files to Api-App is Successful"
 
+                #Get Url of Web-App 
+
+                $GetWebApp = Get-AzureRmWebApp -Name $WebApp -ResourceGroupName $ResourceGroupName
+                $WebUrl = $GetWebApp.DefaultHostName 
+
                 #Adding App Settings to Api-App
                 
                 Write-Output "Adding App settings to Api-App"
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURL" = "$ApiUrl";
+                                    "RedirectURL" = "$WebUrl";
                                     }
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
@@ -300,11 +305,6 @@ try
                 $GetUrl = Get-AzureRmResource -ResourceName $ApiApp -ResourceGroupName $ResourceGroupName -ExpandProperties
                 $GetApiUrl = $GetUrl.Properties | select defaultHostName
                 $ApiUrl = $GetApiUrl.defaultHostName
-
-                #Get Url of Web-App 
-
-                $GetWebApp = Get-AzureRmWebApp -Name $WebApp -ResourceGroupName $ResourceGroupName
-                $WebUrl = $GetWebApp.DefaultHostName 
 
                 #Change the Url in the main.bundle.js file with the with ApiURL
 
