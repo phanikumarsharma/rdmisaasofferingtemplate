@@ -2,33 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "SubscriptionId":
-      {
-        "type": "string",
-        "metadata": {
-          "description":"Subscription ID of your Azure Account"
-        }
-      },
-      
-      "ResourceGroup":
-      {
-        "type": "string",
-        "metadata": {
-          "description":"ResourceGroup Name for the deployment"
-        }
-      },
       "ApplicationID":
       {
         "type": "string",
         "metadata": {
-          "description":"Application ID to modify in your API App"
+          "description":"Application ID/Client ID of the infrastructure"
         }
       },
       "RDBrokerURL":
       {
         "type": "string",
         "metadata": {
-          "description":"RDBrokerURL to modify in your API App"
+          "description":"RDBroker URL of the infrastructure"
         }
       },
       "ResourceURL":
@@ -38,23 +23,17 @@
           "description":"ResourceURL to modify in your API App"
         }
       },
-      "RedirectURL":
-      {
-        "type": "string",
-        "metadata": {
-          "description":"Redirect URL to modify in your API App"
-        }
-      },
+
       "AzureLoginID": {
         "type": "string",
         "metadata": {
-            "description": "HosterAdminName for the Azure Partner Account."
+            "description": "Your azure login ID"
         }
       },
         "AzureLoginPassword": {
             "type": "securestring",
             "metadata": {
-                "description": "HosterAdminPassword for the Azure Partner Account."
+                "description": "Your Azure login password"
             }
         }
 
@@ -62,7 +41,7 @@
        "variables": {
         "nicName": "myVMNic",
         "addressPrefix": "10.0.0.0/16",
-        "vmsubscriptionId":"[subscription().subscriptionId]",
+        "subscriptionId":"[subscription().subscriptionId]",
         "subnetName": "Subnet",
         "subnetPrefix": "10.0.0.0/24",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
@@ -186,7 +165,7 @@
                            "fileUris": [
                             "https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/scripts/New-RdmiMgmtSetup.ps1"
                         ],
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', parameters('SubscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -RedirectURL \"', parameters('RedirectURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', variables('subscriptionId'), '\"',' ',  ' -ResourceGroupName \"', variables('resourcegroupname'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
                         }
                     },
                     "dependsOn": [
