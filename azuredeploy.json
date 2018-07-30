@@ -6,14 +6,14 @@
       {
         "type": "string",
         "metadata": {
-          "description":"Application ID / Client ID of the infrastructure. Ex: 574ee204-xx91-4ac5-xx7a-5a6a4e2784e9"
+          "description":"Application ID / Client ID of the infrastructure.   Ex: 574ee204-xx91-4ac5-xx7a-5a6a4e2784e9"
         }
       },
       "RDBrokerURL":
       {
         "type": "string",
         "metadata": {
-          "description":"RDBroker URL of the infrastructure. Ex:https://rdbroker-uiyyft4gnswme.azurewebsites.net"
+          "description":"RDBroker URL of the infrastructure.   Ex: https://rdbroker-uiyyft4gnswme.azurewebsites.net"
         }
       },
       "ResourceURL":
