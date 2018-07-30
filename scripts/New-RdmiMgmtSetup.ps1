@@ -274,6 +274,7 @@ try
                                     "ResourceUrl" = "$ResourceURL";
                                     "RedirectURL" = "$WebUrl";
                                     }
+                Set-AzureRmADApplication -ApplicationId $ApplicationID -DisplayName "msfttest999" -ReplyUrl $WebUrl
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
             catch [Exception]
