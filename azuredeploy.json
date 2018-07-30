@@ -13,14 +13,14 @@
       {
         "type": "string",
         "metadata": {
-          "description":"RDBroker URL of the infrastructure.   Ex: https://rdbroker-uiyyft4gnswme.azurewebsites.net"
+          "description":"RDBroker URL of the infrastructure   Ex: https://rdbroker-uiyyft4gnswme.azurewebsites.net"
         }
       },
       "ResourceURL":
       {
         "type": "string",
         "metadata": {
-          "description":"Resource URL of the infrastructure. Ex: https://contoso.onmicrosoft.com/RDInframsftrdmisaasf658465e2b4948fe85e"
+          "description":"Resource URL of the infrastructure  Ex: https://contoso.onmicrosoft.com/RDInframsftrdmisaasf658465e2b4948fe85e"
         }
       },
 
