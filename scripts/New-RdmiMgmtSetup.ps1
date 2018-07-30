@@ -354,6 +354,9 @@ try
             Write-Output "Web URL : http://$WebUrl"
        }
     }
+    Set-Location $CodeBitPath
+    .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName -UserName $UserName -Password $Password 
+
 }
 catch [Exception]
 {
