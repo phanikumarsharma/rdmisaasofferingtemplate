@@ -150,7 +150,8 @@ try
         Write-Output "Creating the resource group $ResourceGroupName ...";
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
-        if($ResourceGroupName)
+    }
+    elseif($ResourceGroupName)
         {
             try
             {
@@ -168,8 +169,6 @@ try
             {
                 Write-Output $_.Exception.Message
             }
-
-        }
 
         if($AppServicePlan)
         {
@@ -365,6 +364,7 @@ try
             Write-Output "Web URL : http://$WebUrl"
        }
     }
+    
     start-job -ScriptBlock{
     param($SubscriptionId,$ResourceGroupName)
 
