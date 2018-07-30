@@ -272,7 +272,7 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURL" = "$WebUrl";
+                                    "RedirectURI" = "$WebUrl";
                                     }
                 Set-AzureRmADApplication -ApplicationId $ApplicationID -DisplayName "msfttest999" -ReplyUrl $WebUrl
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
