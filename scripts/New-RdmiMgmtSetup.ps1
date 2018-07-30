@@ -100,9 +100,9 @@ try
     # copy the files from github to VM
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -Uri $fileURI -OutFile "F:\msft-rdmi-saas-offering.zip"
-    New-Item -Path "F:\msft-rdmi-saas-offering" -ItemType directory -Force -ErrorAction SilentlyContinue
-    Expand-Archive "F:\msft-rdmi-saas-offering.zip" -DestinationPath "F:\msft-rdmi-saas-offering" -ErrorAction SilentlyContinue
+    Invoke-WebRequest -Uri $fileURI -OutFile "C:\msft-rdmi-saas-offering.zip"
+    New-Item -Path "C:\msft-rdmi-saas-offering" -ItemType directory -Force -ErrorAction SilentlyContinue
+    Expand-Archive "C:\msft-rdmi-saas-offering.zip" -DestinationPath "C:\msft-rdmi-saas-offering" -ErrorAction SilentlyContinue
     
     #Install AzureRM Module   
         
