@@ -152,23 +152,23 @@ try
         Write-Output "Resource group with name $ResourceGroupName has been created"
     }
     elseif($ResourceGroup)
-    {
-        try
         {
-            ##################################### APPSERVICE PLAN #####################################
+            try
+            {
+                ##################################### APPSERVICE PLAN #####################################
                
-            #create a appservice plan
+                #create a appservice plan
         
-            Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
-            New-AzureRmAppServicePlan -Name $AppServicePlan -Location $Location -ResourceGroupName $ResourceGroupName -Tier Standard
-            $AppPlan = Get-AzureRmAppServicePlan -Name $AppServicePlan -ResourceGroupName $ResourceGroupName
-            Write-Output "AppServicePlan with name $AppServicePlan has been created"
+                Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
+                New-AzureRmAppServicePlan -Name $AppServicePlan -Location $Location -ResourceGroupName $ResourceGroupName -Tier Standard
+                $AppPlan = Get-AzureRmAppServicePlan -Name $AppServicePlan -ResourceGroupName $ResourceGroupName
+                Write-Output "AppServicePlan with name $AppServicePlan has been created"
 
-        }
-        catch [Exception]
-        {
-            Write-Output $_.Exception.Message
-        }
+            }
+            catch [Exception]
+            {
+                Write-Output $_.Exception.Message
+            }
 
         if($AppServicePlan)
         {
@@ -272,22 +272,20 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURI" = "$WebUrl";
+                                    "RedirectURI" = "http://$WebUrl";
                                     }
-               
-                 $url="$WebUrl"
-                 $ADapplication=Get-AzureRmADApplication -ApplicationId "c9ee6db6-1787-47cd-9103-03ef49d9a3d1"
+               $url="$WebUrl"
+                 $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
                  $add=$ADapplication.ReplyUrls.Add($url)
                  $ReplyUrls=$ADapplication.ReplyUrls
-                 Set-AzureRmADApplication -ApplicationId "c9ee6db6-1787-47cd-9103-03ef49d9a3d1" -ReplyUrl $ReplyUrls
-                Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
+                 Set-AzureRmADApplication -ApplicationId $ApplicationID -ReplyUrl $ReplyUrls
+                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
             catch [Exception]
             {
                 Write-Output $_.Exception.Message
             }
         }
-
         if($WebApp -and $ApiApp)
         {
             try
@@ -369,16 +367,15 @@ try
 
             Write-Output "Api URL : http://$ApiUrl"
             Write-Output "Web URL : http://$WebUrl"
-        }
+       }
     }
-    Set-Location $CodeBitPath
     
-    Start-Job -ScriptBlock{
-    param($SubscriptionId,$UserName,$Password,$ResourceGroupName)
+    start-job -ScriptBlock{
+    param($SubscriptionId,$ResourceGroupName)
 
-    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -resourceGroupName $ResourceGroupName"
+    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName"
 
-    } -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
+    } -ArgumentList($SubscriptionId,$ResourceGroupName)
 }
 catch [Exception]
 {
