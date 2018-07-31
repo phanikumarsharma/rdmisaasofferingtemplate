@@ -368,17 +368,17 @@ try
                 Write-Output $_.Exception.Message
             }
 
-            Write-Output "Api URL : http://$ApiUrl"
-            Write-Output "Web URL : http://$WebUrl"
+            Write-Output "Api URL : https://$ApiUrl"
+            Write-Output "Web URL : https://$WebUrl"
        }
     }
     
     start-job -ScriptBlock{
-    param($SubscriptionId,$ResourceGroupName)
+    param($SubscriptionId,$ResourceGroupName,$UserName,$Password)
 
-    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName"
+    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -UserName $UserName -Password $Password -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName"
 
-    } -ArgumentList($SubscriptionId,$ResourceGroupName)
+    } -ArgumentList($SubscriptionId,$ResourceGroupName,$UserName,$Password)
 }
 catch [Exception]
 {
