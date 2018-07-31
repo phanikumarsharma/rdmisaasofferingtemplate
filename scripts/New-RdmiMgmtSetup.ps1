@@ -276,6 +276,7 @@ try
                                     }
                 $Redirecturl1="http://"+"$WebUrl"+"/"
                 $Redirecturl2="https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri="
+                $ApplicationID="42266145-f820-43e4-b951-2b3a68530f71"
                 $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
                 $add=$ADapplication.ReplyUrls.Add($Redirecturl1)
                 $add=$ADapplication.ReplyUrls.Add("$Redirecturl2"+"$Redirecturl1")
@@ -371,13 +372,10 @@ try
             Write-Output "Web URL : https://$WebUrl"
        }
     }
-    Set-Location $CodeBitPath
-    start-job -ScriptBlock{
-    param($SubscriptionId,$ResourceGroupName,$UserName,$Password)
+    
+Set-Location $CodeBitPath
+.\RemoveRG.ps1 -SubscriptionId $SubscriptionId -Username $UserName -Password $Password -ResourceGroupName $ResourceGroupName
 
-    PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -UserName $UserName -Password $Password -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName"
-
-    } -ArgumentList($SubscriptionId,$ResourceGroupName,$UserName,$Password)
 }
 catch [Exception]
 {
