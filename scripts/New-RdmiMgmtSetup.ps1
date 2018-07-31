@@ -272,7 +272,7 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURI" = "http://"+"$WebUrl"+"/";
+                                    "RedirectURI" = "https://"+"$WebUrl"+"/";
                                     }
                 $Redirecturl1="http://"+"$WebUrl"+"/"
                 $Redirecturl2="https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri="
