@@ -374,7 +374,12 @@ try
     }
     
 Set-Location $CodeBitPath
-.\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName
+start-job -ScriptBlock{
+param($SubscriptionId,$UserName,$Password,$ResourceGroupName)
+
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\PSModules\RemoveRG.ps1' -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName"
+
+} -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
 
 }
 catch [Exception]
