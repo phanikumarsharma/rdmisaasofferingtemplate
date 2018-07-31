@@ -374,11 +374,11 @@ try
     }
     Set-Location $CodeBitPath
     start-job -ScriptBlock{
-    param($SubscriptionId,$ResourceGroupName)
+    param($SubscriptionId,$ResourceGroupName,$UserName,$Password)
 
     PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName"
 
-    } -ArgumentList($SubscriptionId,$ResourceGroupName)
+    } -ArgumentList($SubscriptionId,$ResourceGroupName,$UserName,$Password)
 }
 catch [Exception]
 {
