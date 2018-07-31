@@ -272,14 +272,17 @@ try
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
                                     "RDBrokerUrl" = "$RDBrokerURL";
                                     "ResourceUrl" = "$ResourceURL";
-                                    "RedirectURI" = "http://$WebUrl";
+                                    "RedirectURI" = "http://"+"$WebUrl"+"/";
                                     }
-               $url="$WebUrl"
-                 $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
-                 $add=$ADapplication.ReplyUrls.Add($url)
-                 $ReplyUrls=$ADapplication.ReplyUrls
-                 Set-AzureRmADApplication -ApplicationId $ApplicationID -ReplyUrl $ReplyUrls
-                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
+                $Redirecturl1="http://"+"$WebUrl"+"/"
+                $Redirecturl2="https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri="
+                $ApplicationID="42266145-f820-43e4-b951-2b3a68530f71"
+                $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
+                $add=$ADapplication.ReplyUrls.Add($Redirecturl1)
+                $add=$ADapplication.ReplyUrls.Add("$Redirecturl2"+"$Redirecturl1")
+                $ReplyUrls=$ADapplication.ReplyUrls
+                Set-AzureRmADApplication -ApplicationId $ApplicationID -ReplyUrl $ReplyUrls
+                Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
             catch [Exception]
             {
