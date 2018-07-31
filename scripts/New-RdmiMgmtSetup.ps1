@@ -372,7 +372,7 @@ try
             Write-Output "Web URL : http://$WebUrl"
        }
     }
-    
+    Set-Location $CodeBitPath
     start-job -ScriptBlock{
     param($SubscriptionId,$ResourceGroupName)
 
