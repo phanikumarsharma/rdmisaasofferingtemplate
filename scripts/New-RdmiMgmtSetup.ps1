@@ -110,9 +110,17 @@ try
     $azureRmModule = Get-Module AzureRM -ListAvailable | Select-Object -Property Name -ErrorAction SilentlyContinue
     if (!$azureRmModule.Name) {
         Write-Output "AzureRM module Not Available. Installing AzureRM Module"
-        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+        Install-PackageProvider NuGet -Force
         Install-Module Azure -Force
         Install-Module AzureRm -Force
+        Install-Module -Name AzureRM.profile -AllowClobber -Force
+        Install-Module -Name AzureRM.resources -AllowClobber -Force
+        Install-Module -Name AzureRM.Compute -AllowClobber -Force
+
+       <# Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+        Install-Module Azure -Force
+        Install-Module AzureRm -Force #>
         Write-Output "Installed AzureRM Module successfully"
     } 
     else
@@ -124,7 +132,9 @@ try
 
     Write-Output "Importing AzureRm Module.."
     Import-Module AzureRm -ErrorAction SilentlyContinue -Force
-
+    Import-Module AzureRM.profile
+    Import-Module AzureRM.resources
+    Import-Module AzureRM.Compute
     #Login to AzureRM Account
 
     Write-Output "Login Into Azure RM.."
