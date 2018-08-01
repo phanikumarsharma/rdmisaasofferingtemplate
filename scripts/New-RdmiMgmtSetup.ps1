@@ -110,17 +110,9 @@ try
     $azureRmModule = Get-Module AzureRM -ListAvailable | Select-Object -Property Name -ErrorAction SilentlyContinue
     if (!$azureRmModule.Name) {
         Write-Output "AzureRM module Not Available. Installing AzureRM Module"
-
-        Install-PackageProvider NuGet -Force
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Install-Module Azure -Force
-        Install-Module AzureRm -Force
-        Install-Module -Name AzureRM.profile -AllowClobber -Force
-        Install-Module -Name AzureRM.resources -AllowClobber -Force
-        Install-Module -Name AzureRM.Compute -AllowClobber -Force
-
-       <# Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-        Install-Module Azure -Force
-        Install-Module AzureRm -Force #>
+        Install-Module AzureRm -Force 
         Write-Output "Installed AzureRM Module successfully"
     } 
     else
@@ -284,7 +276,7 @@ try
                                     "ResourceUrl" = "$ResourceURL";
                                     "RedirectURI" = "https://"+"$WebUrl"+"/";
                                     }
-                $Redirecturl1="http://"+"$WebUrl"+"/"
+                $Redirecturl1="https://"+"$WebUrl"+"/"
                 $Redirecturl2="https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri="
                 $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
                 $add=$ADapplication.ReplyUrls.Add($Redirecturl1)
@@ -326,7 +318,7 @@ try
                 #Change the Url in the main.bundle.js file with the with ApiURL
 
                 Write-Output "Updating the Url in main.bundle.js file with Api-app Url"
-                (Get-Content $MainbundlePath).replace( "[api_url]", "http://"+$ApiUrl) | Set-Content $MainbundlePath
+                (Get-Content $MainbundlePath).replace( "[api_url]", "https://"+$ApiUrl) | Set-Content $MainbundlePath
 
                 #Get publishing profile from web app
                 
@@ -382,15 +374,6 @@ try
        }
     }
     
-Set-Location $CodeBitPath
-
-start-job -ScriptBlock{
-param($SubscriptionId,$UserName,$Password,$ResourceGroupName)
-
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1' -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName"
-
-} -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
-
 }
 catch [Exception]
 {
