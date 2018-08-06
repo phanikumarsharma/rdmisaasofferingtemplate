@@ -375,8 +375,8 @@ try
     }
      start-job -Name job1 -ScriptBlock {
      Set-ExecutionPolicy -ExecutionPolicy Bypass 
-     .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue
-    }
+     Invoke-Expression -Command "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName -ErrorAction Ignore"
+    } -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
    }
 catch [Exception]
 {
