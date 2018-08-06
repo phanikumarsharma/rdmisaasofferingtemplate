@@ -363,7 +363,7 @@ try
        }
     }
     Set-Location $CodeBitPath
-    Invoke-Expression -Command "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1" -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName 
+    Invoke-Expression -Command "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName"
    }
 catch [Exception]
 {
