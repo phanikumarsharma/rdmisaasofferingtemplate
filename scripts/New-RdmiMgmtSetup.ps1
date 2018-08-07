@@ -373,10 +373,7 @@ try
             Write-Output "Web URL : https://$WebUrl"
        }
     }
-     start-job -Name job1 -ScriptBlock {
-     Set-ExecutionPolicy -ExecutionPolicy Bypass 
-     .\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue
-    }
+
    }
 catch [Exception]
 {
