@@ -373,14 +373,7 @@ try
             Write-Output "Web URL : https://$WebUrl"
        }
     }
-<<<<<<< HEAD
 
-=======
-     start-job -Name job1 -ScriptBlock {
-     Set-ExecutionPolicy -ExecutionPolicy Bypass 
-     Invoke-Expression -Command "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1 -SubscriptionId $SubscriptionId -UserName $UserName -Password $Password -ResourceGroupName $ResourceGroupName -ErrorAction Ignore"
-    } -ArgumentList($SubscriptionId,$UserName,$Password,$ResourceGroupName)
->>>>>>> 76d7f0c08b81674198894e526c636ab2a5b9465d
    }
 catch [Exception]
 {
