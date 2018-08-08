@@ -29,6 +29,10 @@ Param(
 
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
+    [string] $RGName,
+
+    [Parameter(Mandatory = $False)]
+    [ValidateNotNullOrEmpty()]
     [string] $AppServicePlan = "msft-rdmi-saas-$((get-date).ToString("ddMMyyyyhhmm"))",
 
     [Parameter(Mandatory = $False)]
@@ -82,6 +86,8 @@ Param(
     [Parameter(Mandatory = $False)]
     [ValidateNotNullOrEmpty()]
     [string]$ApiAppExtractionPath = ".\msft-rdmi-saas-api\msft-rdmi-saas-api.zip"
+
+
 )
 
 try
@@ -362,7 +368,9 @@ try
             Write-Output "Web URL : https://$WebUrl"
        }
     }
-    
+    $action= New-ScheduledTaskAction -Execute "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1" -Argument '-NoProfile -WindowStyle Hidden -command "& {get-eventlog -logname Application -After ((get-date).AddDays(-1)) | Export-Csv -Path c:\fso\applog.csv -Force -NoTypeInformation}"'
+    $trigger =  New-ScheduledTaskTrigger -Once 
+    Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "RemoveRG" -Description "Daily dump of Applog"
    }
 catch [Exception]
 {
