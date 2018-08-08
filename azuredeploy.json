@@ -6,7 +6,7 @@
       {
         "type": "string",
         "metadata": {
-          "description":"Resource Group name for the Deployment"
+          "description":"Resource Group name"
         }
       },
       "ApplicationID":
@@ -172,7 +172,7 @@
                            "fileUris": [
                             "https://raw.githubusercontent.com/phanikumarsharma/rdmisaasofferingtemplate/master/scripts/New-RdmiMgmtSetup.ps1"
                         ],
-                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', variables('subscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', -RGName \"', variables('RGName'), '\"',' ',' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"')]"
+                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File New-RdmiMgmtSetup.ps1', ' -SubscriptionId \"', variables('subscriptionId'), '\"',' ',  ' -ResourceGroupName \"', parameters('ResourceGroup'), '\"',' ', ' -Location \"', variables('Location'), '\"',' ', ' -ApplicationID \"', parameters('ApplicationID'), '\"',' ', ' -RDBrokerURL \"', parameters('RDBrokerURL'), '\"',' ', ' -ResourceURL \"', parameters('ResourceURL'), '\"',' ',' -UserName \"', parameters('AzureLoginID'), '\"',' ',' -Password \"', parameters('AzureLoginPassword'), '\"',' ',' -fileURI \"', variables('FileURI'), '\"',' ',' -RGName \"', variables('RGName'), '\"')]"
                         }
                     },
                     "dependsOn": [
