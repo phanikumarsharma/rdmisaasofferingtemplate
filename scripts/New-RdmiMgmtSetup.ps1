@@ -160,8 +160,7 @@ try
         Write-Output "Resource group with name $ResourceGroupName has been created"
 
     }
-    else
-    {
+    
             try
             {
                 ##################################### APPSERVICE PLAN #####################################
@@ -379,7 +378,7 @@ try
             Write-Output "Api URL : https://$ApiUrl"
             Write-Output "Web URL : https://$WebUrl"
        }
-    }
+    
 
     New-PSDrive -Name RemoveRG -PSProvider FileSystem -Root "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering" | Out-Null
 @"
