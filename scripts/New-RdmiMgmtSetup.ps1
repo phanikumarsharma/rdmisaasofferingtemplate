@@ -152,13 +152,16 @@ try
     # Create a resource group.
 
     Write-Output "Checking if the resource group $ResourceGroupName exists";
-    $ResourceGroup = Get-AzureRmResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue
-    if (! $ResourceGroup)
+    $ResourceGroups = Get-AzureRmResourceGroup
+    if ($ResourceGroupName -notin $ResourceGroups.ResourceGroupName)
     {
         Write-Output "Creating the resource group $ResourceGroupName ...";
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
 
+    }
+    else
+    {
             try
             {
                 ##################################### APPSERVICE PLAN #####################################
