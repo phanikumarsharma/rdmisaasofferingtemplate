@@ -103,14 +103,14 @@ Disable-ieESC
 
 try
 {
-    # copy the files from github to VM
+    # Copy the files from github to VM
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $fileURI -OutFile "C:\msft-rdmi-saas-offering.zip"
     New-Item -Path "C:\msft-rdmi-saas-offering" -ItemType directory -Force -ErrorAction SilentlyContinue
     Expand-Archive "C:\msft-rdmi-saas-offering.zip" -DestinationPath "C:\msft-rdmi-saas-offering" -ErrorAction SilentlyContinue
     
-    #Install AzureRM Module   
+    # Install AzureRM Module   
         
     Write-Output "Checking if AzureRm module is installed.."
     $azureRmModule = Get-Module AzureRM -ListAvailable | Select-Object -Property Name -ErrorAction SilentlyContinue
@@ -126,14 +126,15 @@ try
         Write-Output "AzureRM Module Available"
     }
 
-    #Import AzureRM Module
+    # Import AzureRM Module
 
     Write-Output "Importing AzureRm Module.."
     Import-Module AzureRm -ErrorAction SilentlyContinue -Force
     Import-Module AzureRM.profile
     Import-Module AzureRM.resources
     Import-Module AzureRM.Compute
-    #Login to AzureRM Account
+
+    # Login to AzureRM Account
 
     Write-Output "Login Into Azure RM.."
     
@@ -141,13 +142,13 @@ try
     $Credential = New-Object System.Management.Automation.PSCredential($UserName,$Psswd)
     Login-AzureRmAccount -Credential $Credential
 
-    #Select the AzureRM Subscription
+    # Select the AzureRM Subscription
 
     Write-Output "Selecting Azure Subscription.."
     Select-AzureRmSubscription -SubscriptionId $SubscriptionId
 
 
-    ##################################### RESOURCE GROUP #####################################
+    ## RESOURCE GROUP ##
 
     # Create a resource group.
 
@@ -163,9 +164,9 @@ try
     
             try
             {
-                ##################################### APPSERVICE PLAN #####################################
+                ## APPSERVICE PLAN ##
                
-                #create a appservice plan
+                #create an appservice plan
         
                 Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
                 New-AzureRmAppServicePlan -Name $AppServicePlan -Location $Location -ResourceGroupName $ResourceGroupName -Tier Standard
@@ -182,18 +183,17 @@ try
         {
             try
             {
+                ## CREATING APPS ##
 
-                ##################################### CREATING WEB-APP #####################################
-
-                #create a web app
+                # create a web app
             
                 Write-Output "Creating a WebApp in resource group  $ResourceGroupName ...";
                 New-AzureRmWebApp -Name $WebApp -Location $Location -AppServicePlan $AppServicePlan -ResourceGroupName $ResourceGroupName
                 Write-Output "WebApp with name $WebApp has been created"
 
-                ##################################### CREATING API-APP #####################################
+                ## CREATING API-APP ##
 
-                #Create a api app
+                # Create an api app
             
                 Write-Output "Creating a ApiApp in resource group  $ResourceGroupName ...";
                 $ServerFarmId = $AppPlan.Id
@@ -214,7 +214,7 @@ try
             try
             {
 
-                ##################################### PUBLISHING API-APP PACKAGE #####################################
+                ## PUBLISHING API-APP PACKAGE ##
                 
                 Set-Location $CodeBitPath
 
@@ -269,12 +269,12 @@ try
                 $ApiAppClient.Dispose() 
                 Write-Output "Uploading of Extracted files to Api-App is Successful"
 
-                #Get Url of Web-App 
+                # Get Url of Web-App 
 
                 $GetWebApp = Get-AzureRmWebApp -Name $WebApp -ResourceGroupName $ResourceGroupName
                 $WebUrl = $GetWebApp.DefaultHostName 
 
-                #Adding App Settings to Api-App
+                # Adding App Settings to Api-App
                 
                 Write-Output "Adding App settings to Api-App"
                 $ApiAppSettings = @{"ApplicationId" = "$ApplicationID";
@@ -300,7 +300,7 @@ try
         {
             try
             {
-                ##################################### PUBLISHING WEB-APP PACKAGE #####################################
+                ## PUBLISHING WEB-APP PACKAGE ##
                 
                 Set-Location $CodeBitPath
 
@@ -311,22 +311,22 @@ try
                 Expand-Archive -Path $WebAppExtractionPath -DestinationPath $WebAppDirectory -Force 
                 $WebAppExtractedPath = Get-ChildItem -Path $WebAppDirectory| Where-Object {$_.FullName -notmatch '\\*.zip($|\\)'} | Resolve-Path -Verbose
 
-                #Get the Main.bundle.js file Path 
+                # Get the Main.bundle.js file Path 
 
                 $MainbundlePath = Get-ChildItem $WebAppExtractedPath -recurse | where {($_.FullName -match "main.bundle.js" ) -and ($_.FullName -notmatch "main.bundle.js.map")} | % {$_.FullName}
  
-                #Get Url of Api-App 
+                # Get Url of Api-App 
 
                 $GetUrl = Get-AzureRmResource -ResourceName $ApiApp -ResourceGroupName $ResourceGroupName -ExpandProperties
                 $GetApiUrl = $GetUrl.Properties | select defaultHostName
                 $ApiUrl = $GetApiUrl.defaultHostName
 
-                #Change the Url in the main.bundle.js file with the with ApiURL
+                # Change the Url in the main.bundle.js file with the ApiURL
 
                 Write-Output "Updating the Url in main.bundle.js file with Api-app Url"
                 (Get-Content $MainbundlePath).replace( "[api_url]", "https://"+$ApiUrl) | Set-Content $MainbundlePath
 
-                #Get publishing profile from web app
+                # Get publishing profile from web app
                 
                 Write-Output "Getting the Publishing profile information from Web-App"
                 $WebAppXML = (Get-AzureRmWebAppPublishingProfile -Name $WebApp `
@@ -335,14 +335,14 @@ try
 
                 $WebAppXML = [xml]$WebAppXML
 
-                #Extract connection information from publishing profile
+                # Extract connection information from publishing profile
 
                 Write-Output "Gathering the username, password and publishurl from the Web-App Publishing Profile"
                 $WebAppUserName = $WebAppXML.SelectNodes("//publishProfile[@publishMethod=`"FTP`"]/@userName").value
                 $WebAppPassword = $WebAppXML.SelectNodes("//publishProfile[@publishMethod=`"FTP`"]/@userPWD").value
                 $WebAppURL = $WebAppXML.SelectNodes("//publishProfile[@publishMethod=`"FTP`"]/@publishUrl").value
                 
-                #Publish Web-App Package files recursively
+                # Publish Web-App Package files recursively
 
                 Write-Output "Uploading the Extracted files to Web-App"
                 Set-Location $WebAppExtractedPath
@@ -378,7 +378,7 @@ try
             Write-Output "Api URL : https://$ApiUrl"
             Write-Output "Web URL : https://$WebUrl"
        }
-    
+
 
     New-PSDrive -Name RemoveRG -PSProvider FileSystem -Root "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering" | Out-Null
 @"
@@ -389,6 +389,8 @@ try
 <RGName>$RGName</RGName>
 </RemoveRG>
 "@| Out-File -FilePath RemoveRG:\RemoveRG.xml -Force
+
+# creating job to run the remove resource group script
 
      $jobname = "RemoveResourceGroup"
      $script =  "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1"
