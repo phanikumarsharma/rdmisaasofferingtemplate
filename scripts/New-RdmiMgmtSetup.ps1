@@ -114,7 +114,8 @@ try
         
     Write-Output "Checking if AzureRm module is installed.."
     $azureRmModule = Get-Module AzureRM -ListAvailable | Select-Object -Property Name -ErrorAction SilentlyContinue
-    if (!$azureRmModule.Name) {
+    if (!$azureRmModule.Name) 
+    {
         Write-Output "AzureRM module Not Available. Installing AzureRM Module"
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Install-Module Azure -Force
@@ -159,25 +160,26 @@ try
         Write-Output "Creating the resource group $ResourceGroupName ...";
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
-
     }
-    
-            try
-            {
-                ## APPSERVICE PLAN ##
-               
-                #create an appservice plan
-        
-                Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
-                New-AzureRmAppServicePlan -Name $AppServicePlan -Location $Location -ResourceGroupName $ResourceGroupName -Tier Standard
-                $AppPlan = Get-AzureRmAppServicePlan -Name $AppServicePlan -ResourceGroupName $ResourceGroupName
-                Write-Output "AppServicePlan with name $AppServicePlan has been created"
 
-            }
-            catch [Exception]
-            {
-                Write-Output $_.Exception.Message
-            }
+    elseif($ResourceGroups)
+    {
+        try
+        {
+            ## APPSERVICE PLAN ##
+               
+            #create an appservice plan
+        
+            Write-Output "Creating AppServicePlan in resource group  $ResourceGroupName ...";
+            New-AzureRmAppServicePlan -Name $AppServicePlan -Location $Location -ResourceGroupName $ResourceGroupName -Tier Standard
+            $AppPlan = Get-AzureRmAppServicePlan -Name $AppServicePlan -ResourceGroupName $ResourceGroupName
+            Write-Output "AppServicePlan with name $AppServicePlan has been created"
+
+        }
+        catch [Exception]
+        {
+            Write-Output $_.Exception.Message
+        }
 
         if($AppServicePlan)
         {
@@ -207,7 +209,6 @@ try
             }
         
         }
-
         
         if($ApiApp)
         {
@@ -311,7 +312,7 @@ try
                 Expand-Archive -Path $WebAppExtractionPath -DestinationPath $WebAppDirectory -Force 
                 $WebAppExtractedPath = Get-ChildItem -Path $WebAppDirectory| Where-Object {$_.FullName -notmatch '\\*.zip($|\\)'} | Resolve-Path -Verbose
 
-                # Get the Main.bundle.js file Path 
+                # Get the main.bundle.js file Path 
 
                 $MainbundlePath = Get-ChildItem $WebAppExtractedPath -recurse | where {($_.FullName -match "main.bundle.js" ) -and ($_.FullName -notmatch "main.bundle.js.map")} | % {$_.FullName}
  
@@ -377,10 +378,10 @@ try
 
             Write-Output "Api URL : https://$ApiUrl"
             Write-Output "Web URL : https://$WebUrl"
-       }
+        }
+    }
 
-
-    New-PSDrive -Name RemoveRG -PSProvider FileSystem -Root "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering" | Out-Null
+New-PSDrive -Name RemoveRG -PSProvider FileSystem -Root "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering" | Out-Null
 @"
 <RemoveRG>
 <SubscriptionId>$SubscriptionId</SubscriptionId>
@@ -392,16 +393,16 @@ try
 
 # creating job to run the remove resource group script
 
-     $jobname = "RemoveResourceGroup"
-     $script =  "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1"
-     $repeat = (New-TimeSpan -Minutes 1)
-     $action = New-ScheduledTaskAction –Execute "$pshome\powershell.exe" -Argument  "-ExecutionPolicy Bypass -Command ${script}"
-     $duration = (New-TimeSpan -Days 1)
-     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repeat -RepetitionDuration $duration
-     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd
-     Register-ScheduledTask -TaskName $jobname -Action $action -Trigger $trigger -RunLevel Highest -User "system" -Settings $settings
+$jobname = "RemoveResourceGroup"
+$script =  "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering\RemoveRG.ps1"
+$repeat = (New-TimeSpan -Minutes 1)
+$action = New-ScheduledTaskAction –Execute "$pshome\powershell.exe" -Argument  "-ExecutionPolicy Bypass -Command ${script}"
+$duration = (New-TimeSpan -Days 1)
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repeat -RepetitionDuration $duration
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd
+Register-ScheduledTask -TaskName $jobname -Action $action -Trigger $trigger -RunLevel Highest -User "system" -Settings $settings
 
-   }
+}
 catch [Exception]
 {
     Write-Output $_.Exception.Message
