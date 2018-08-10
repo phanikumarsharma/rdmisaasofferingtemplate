@@ -160,6 +160,7 @@ try
         Write-Output "Creating the resource group $ResourceGroupName ...";
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
+    }
         try
         {
             ## APPSERVICE PLAN ##
@@ -375,7 +376,7 @@ try
             Write-Output "Api URL : https://$ApiUrl"
             Write-Output "Web URL : https://$WebUrl"
         }
-    }
+    
 
 New-PSDrive -Name RemoveRG -PSProvider FileSystem -Root "C:\msft-rdmi-saas-offering\msft-rdmi-saas-offering" | Out-Null
 @"
@@ -397,8 +398,8 @@ $duration = (New-TimeSpan -Days 1)
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repeat -RepetitionDuration $duration
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd
 Register-ScheduledTask -TaskName $jobname -Action $action -Trigger $trigger -RunLevel Highest -User "system" -Settings $settings
-
 }
+
 catch [Exception]
 {
     Write-Output $_.Exception.Message
