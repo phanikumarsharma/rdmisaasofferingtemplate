@@ -161,8 +161,7 @@ try
         New-AzureRmResourceGroup -Name $ResourceGroupName -Location "$Location" -ErrorAction Stop 
         Write-Output "Resource group with name $ResourceGroupName has been created"
     }
-
-    elseif($ResourceGroups)
+    else
     {
         try
         {
