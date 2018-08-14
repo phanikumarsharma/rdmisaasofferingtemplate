@@ -280,13 +280,14 @@ try
                                     "ResourceUrl" = "$ResourceURL";
                                     "RedirectURI" = "https://"+"$WebUrl"+"/";
                                     }
-                $Redirecturl1="https://"+"$WebUrl"+"/"
+                <#$Redirecturl1="https://"+"$WebUrl"+"/"
                 $Redirecturl2="https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri="
                 $ADapplication=Get-AzureRmADApplication -ApplicationId $ApplicationID
                 $add=$ADapplication.ReplyUrls.Add($Redirecturl1)
                 $add=$ADapplication.ReplyUrls.Add("$Redirecturl2"+"$Redirecturl1")
                 $ReplyUrls=$ADapplication.ReplyUrls
-                Set-AzureRmADApplication -ApplicationId $ApplicationID -ReplyUrl $ReplyUrls
+                Set-AzureRmADApplication -ApplicationId $ApplicationID -ReplyUrl $ReplyUrls #>
+
                 Set-AzureRmWebApp -AppSettings $ApiAppSettings -Name $ApiApp -ResourceGroupName $ResourceGroupName
             }
             catch [Exception]
